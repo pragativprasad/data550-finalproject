@@ -1,0 +1,115 @@
+---
+title: "RSV and Influenza Report"
+author: "Pragati Prasad"
+date:   "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+pacman::p_load(tidyverse, 
+               data.table,
+               gtsummary, 
+               kableExtra)
+```
+
+
+# {.tabset}
+
+## Introduction
+
+Respiratory syncitial virus (RSV) and influenza (flu) are respiratory viruses that have seasonal epidemics in the United States. The respiratory season starts around the beginning of October and ends at the end of April of the following year. Because of this, CDC starts surveillance of RSV and Flu in MMWR Week 40 (which corresponds to the first week of October roughly) to week 18 (last week of April roughly). 
+
+Here, we visualize and summarize seasonal RSV and flu epidemics from 2018-2019 season to 2023-2024 season (which is still ongoing).
+
+We also include a regression analysis to investigate age and race/ethnicity patterns over all seasons.
+
+[Data in this dashboard are up to date as of **February 15, 2024**.](https://data.cdc.gov/Public-Health-Surveillance/Rates-of-Laboratory-Confirmed-RSV-COVID-19-and-Flu/kvib-3txy/about_data)
+
+The influenza surveillance system is call FluSurv-NET and the RSV surveillance system is called RSV-NET.
+
+[Reference for MMWR Weeks](https://ibis.doh.nm.gov/resource/MMWRWeekCalendar.html)
+
+## RSV
+
+The figure below depicts **RSV** seasonal hospitalization trajectories in the United States from the 2018-2019 to 2023-2024 respiratory seasons. The peaks are variable in timing, ranging from  mid-November (MMWR Week 45) to the first week of January (MMWR Week 1), and magnitude, ranging from more than 5 hospitalizations per 100,000 per week to less than 1.5 hospitalizations per 100,000 per week. The shape of the curves are even less consistent during the COVID-19 pandemic: not as many RSV hospitalizations were detected in 2020-2021 and 2021-2022 RSV hospitalizations clearly began much earlier than October.
+
+In the hospitalization rate-by-race table, we can see that American Indians/Alaska Natives typically have much higher rates of hospitalization than any other race, with Black and Hispanic groups also having high rates of RSV hospitalizations.
+
+In the hospitalization rate-by-age table at the bottom, we found that older adults and young children have extremely high rates of hospitalization with RSV. In the 2022-2023 season for example, infants had a cumulative hospitalization rate of 1,502.7 per 100,000 and older adults aged 85+ had a rate of 150.9, while adults ages 18-49 had a cumulative rate of 5.8.  
+
+```{r, echo=F, message=F, warning=F}
+race_table <- read.csv("data/rsv_race.csv")
+age_table <- read.csv("data/rsv_age.csv")
+overall <- read.csv("data/rsv_epicurve.csv")
+model_race <- readRDS("output/model_rsv_race.rds")
+
+ggplot(overall, aes(x = MMWR.Week, y = Weekly.Rate, group = Season)) +
+  geom_line(aes(color = Season), lwd = 2, alpha = 0.7)+
+  theme_bw()+
+  ggtitle(paste0("Weekly Influenza Rates per 100,000 by Season"))+
+  ylab("Rate")+
+  xlab("MMWR Week")
+
+
+# Printing the race table
+knitr::kable(race_table, caption = paste0("Cumulative Rate per 100,000 of Influenza Hospitalizations by Season and Race")) %>%
+  add_indent(c(2,3,4,5,6), level_of_indent = 2) %>%
+  kable_styling() 
+
+
+#printing the age table
+knitr::kable(age_table, 
+             caption = paste0("Cumulative Rate of per 100,000 Influenza Hospitalizations by Season and Age")) %>%
+    add_indent(c(2,9), level_of_indent = 2) %>%
+    add_indent(c(3,6,10,14,15), level_of_indent = 3)%>%
+    add_indent(c(4,5,7,8,11,12,13,16,17), level_of_indent = 4) %>%
+    add_indent(c(18,19), level_of_indent = 5) %>%
+    kable_styling()
+
+tbl_regression(model_race)
+```
+
+## Flu
+
+The figure below depicts **influenza** seasonal hospitalization trajectories in the United States from the 2018-2019 to 2023-2024 respiratory seasons. We can see that influenza hospitalizations are much higher overall in comparison to RSV hospitalizations
+
+The peaks are variable in timing, ranging from  early December (MMWR Week 48) to the mid-March (MMWR Week 11). Peak magnitudes ranged from more than 5 hospitalizations per 100,000 per week to around 8.8 hospitalizations per 100,000 per week. The 2020-2021 and 2021-2022 seasons did not have many influenza detected in hospitalizations.
+
+In the hospitalization rate-by-race table, the American Indian/Alaska Native and Black groups typically have much higher rates of hospitalization than any other race, with  Hispanics also having high rates of RSV hospitalizations.
+
+In the hospitalization rate-by-age table at the bottom, we see much higher flu hospitalization rates in young children and older adults: in the 2022-2023 season, the hospitalization rate was 116.8 per 100,000 in infants, 27.1 in adults ages 18-49, and 350.3 in older adults aged 85+.
+
+```{r, echo=F, message=F, warning=F}
+race_table <- read.csv("data/flu_race.csv")
+age_table <- read.csv("data/flu_age.csv")
+overall <- read.csv("data/flu_epicurve.csv")
+model_race <- readRDS("output/model_flu_race.rds")
+
+ggplot(overall, aes(x = MMWR.Week, y = Weekly.Rate, group = Season)) +
+  geom_line(aes(color = Season), lwd = 2, alpha = 0.7)+
+  theme_bw()+
+  ggtitle(paste0("Weekly Influenza Rates per 100,000 by Season"))+
+  ylab("Rate")+
+  xlab("MMWR Week")
+
+# Printing the race table
+knitr::kable(race_table, caption = paste0("Cumulative Rate per 100,000 of Influenza Hospitalizations by Season and Race")) %>%
+  add_indent(c(2,3,4,5,6), level_of_indent = 2) %>%
+  kable_styling() 
+
+#printing the age table
+knitr::kable(age_table, 
+             caption = paste0("Cumulative Rate of per 100,000 Influenza Hospitalizations by Season and Age")) %>%
+    add_indent(c(2,9), level_of_indent = 2) %>%
+    add_indent(c(3,6,10,14,15), level_of_indent = 3)%>%
+    add_indent(c(4,5,7,8,11,12,13,16,17), level_of_indent = 4) %>%
+    add_indent(c(18,19), level_of_indent = 5) %>%
+    kable_styling()
+
+tbl_regression(model_race)
+
+
+```
+
