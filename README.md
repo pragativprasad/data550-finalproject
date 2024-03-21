@@ -13,7 +13,7 @@ Final project for DATA 550
 
 `code/02_regression_analysis.R`
 
-  - runs regression analysis of race on cumultaive rate from cleaned data files in `data/` folder
+  - runs regression analysis of race on cumulative rate from cleaned data files in `data/` folder
   - outputs regression summary tables to `.rds` files in `output/` folder
   
 `code/03_render_report.R`
