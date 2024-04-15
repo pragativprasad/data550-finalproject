@@ -10,3 +10,7 @@ regression: code/02_regression_analysis.R
 .PHONY: clean
 clean:
 	rm -f output/*.rds && rm -f FluRSV_Report.html
+	
+.PHONY: install
+install: 
+	Rscript -e "renv::restore(prompt=FALSE)"
