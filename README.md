@@ -37,3 +37,16 @@ How to synchronize packages:
 1. Run `Rscript renv/activate.R`.
 2. Run `make install` to restore package versions.
 
+------------------------------------------------------------------------
+
+How to build Docker image:
+
+  Run `make resp_image`
+ 
+------------------------------------------------------------------------
+
+How to create FluRSV_Report.html repory:
+
+  Run `make docker-run`
+
+------------------------------------------------------------------------
