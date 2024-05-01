@@ -45,8 +45,9 @@ How to build Docker image:
  
 ------------------------------------------------------------------------
 
-How to create FluRSV_Report.html repory:
+How to create FluRSV_Report.html report:
 
-  Run `make docker-run`
+  Run `make docker-resp-report` if you have a Mac
+  Run `make docker-resp-report-w` if you have Windows
 
 ------------------------------------------------------------------------
