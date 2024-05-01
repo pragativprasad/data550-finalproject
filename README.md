@@ -4,6 +4,10 @@ Final project for DATA 550
 
 ------------------------------------------------------------------------
 
+Using CDC data on RSV (https://data.cdc.gov/Public-Health-Surveillance/Rates-of-Laboratory-Confirmed-RSV-COVID-19-and-Flu/kvib-3txy/about_data) and Flu (https://gis.cdc.gov/grasp/fluview/fluhosprates.html) compare weekly rates of RSV and Influenza, by race and age.
+
+------------------------------------------------------------------------
+
 ## Code Description
 
 `code/01_data_cleaning.R`
@@ -47,7 +51,6 @@ How to build Docker image:
 
 How to create FluRSV_Report.html report:
 
-  Run `make docker-resp-report` if you have a Mac
-  Run `make docker-resp-report-w` if you have Windows
+  Run `make docker-resp-report`
 
 ------------------------------------------------------------------------

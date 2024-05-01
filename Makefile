@@ -18,15 +18,11 @@ install:
 PROJECTFILES = FluRSV_Report.Rmd code/01_data_cleaning.R code/02_regression_analysis.R code/03_render_report.R data/rsv_age.csv data/rsv_race.csv data/rsv_epicurve.csv data/flu_age.csv data/flu_race.csv data/flu_epicurve.csv Makefile README.md .gitignore  
 RENVFILES = renv.lock renv/activate.R renv/settings.json .Rprofile
 
-# Project Image
+# Project Docker Image
 resp_image: Dockerfile $(PROJECTFILES) $(RENVFILES)
 	docker build -t resp_image .
 	touch $@
 
-# On Mac
+# Run Report via Public Docker Image
 docker-resp-report:
-	docker run -v "$$(pwd)"/report:/project/report resp_image	
-
-# On Windows
-docker-resp-report-w:
-	docker run -v "/$$(pwd)"/report:/project/report resp_image
+	docker run -v "$$(pwd)"/report:/project/report pragativprasad/resp_image	
